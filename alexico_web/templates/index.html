@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analizador Léxico</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script>
+        function clearForm() {
+            document.getElementById('code').value = '';
+            document.getElementById('results').innerHTML = '';
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Analizador Léxico</h1>
+        <form action="/analyze" method="post">
+            <label for="code">Código:</label>
+            <textarea id="code" name="code" placeholder="Ingrese el código aquí...">{{ code }}</textarea><br>
+
+            <div class="input-row">
+                <div class="input-column">
+                    <label for="name">Nombre:</label>
+                    <input type="text" id="name" name="name" value="Oscar Abel Torres Gomez" readonly>
+                </div>
+                <div class="input-column">
+                    <label for="matricula">Matrícula:</label>
+                    <input type="text" id="matricula" name="matricula" value="A221686" readonly>
+                </div>
+            </div>
+
+            <div class="button-container">
+                <button type="submit">Analizar</button>
+                <button type="button" class="clear" onclick="clearForm()">Limpiar</button>
+            </div>
+        </form>
+
+        <div id="results">
+            {% if results %}
+            <h2>Resultados:</h2>
+            <div class="contenedor_tabla">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Token</th>
+                            <th>Lexema</th>
+                            <th>Línea</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for result in results %}
+                        <tr>
+                            <td>{{ result.token }}</td>
+                            <td>{{ result.lexema }}</td>
+                            <td>{{ result.linea }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>
