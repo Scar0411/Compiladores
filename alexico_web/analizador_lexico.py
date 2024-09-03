@@ -26,7 +26,7 @@ tokens = [
     'PUNTO', 
     'PARENTESIS_ABIERTO', 
     'PARENTESIS_CERRADO', 
-    'LLAVE_ABIERTA', 
+    'LLAVE_ABIERTA',  
     'LLAVE_CERRADA',
     'PUNTO_Y_COMA', 
     'IDENTIFICADOR', 
