@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Analizador Léxico</title>
+    <title>Analizador Léxico y Sintáctico</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <script>
         function clearForm() {
@@ -14,31 +14,24 @@
 </head>
 <body>
     <div class="container">
-        <h1>Analizador Léxico</h1>
-        <form action="/analyze" method="post">
-            <label for="code">Código:</label>
-            <textarea id="code" name="code" placeholder="Ingrese el código aquí...">{{ code }}</textarea><br>
+        <!-- Contenedor del formulario -->
+        <div class="form-container">
+            <h1>Analizador Léxico y Sintáctico</h1>
+            <form action="/" method="post">
+                <label for="code">Código:</label>
+                <textarea id="code" name="code" placeholder="Ingrese el código aquí...">{{ code }}</textarea><br>
 
-            <div class="input-row">
-                <div class="input-column">
-                    <label for="name">Nombre:</label>
-                    <input type="text" id="name" name="name" value="Oscar Abel Torres Gomez" readonly>
+                <div class="button-container">
+                    <button type="submit">Analizar</button>
+                    <button type="button" class="clear" onclick="clearForm()">Limpiar</button>
                 </div>
-                <div class="input-column">
-                    <label for="matricula">Matrícula:</label>
-                    <input type="text" id="matricula" name="matricula" value="A221686" readonly>
-                </div>
-            </div>
+            </form>
+        </div>
 
-            <div class="button-container">
-                <button type="submit">Analizar</button>
-                <button type="button" class="clear" onclick="clearForm()">Limpiar</button>
-            </div>
-        </form>
-
+        <!-- Resultados Léxicos -->
         <div id="results">
             {% if results %}
-            <h2>Resultados:</h2>
+            <h2>Resultados Léxicos:</h2>
             <div class="contenedor_tabla">
                 <table>
                     <thead>
@@ -59,6 +52,18 @@
                     </tbody>
                 </table>
             </div>
+            <div class="token-info">
+                <p><strong>Total de palabras reservadas:</strong> <span id="reserved-count">{{ reserved_count }}</span></p>
+                <p><strong>Total de tokens:</strong> <span id="token-count">{{ token_count }}</span></p>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Resultado Sintáctico (Simplemente correcto o incorrecto) -->
+        <div id="sintactico">
+            {% if sintactico %}
+            <h2>Resultado Sintáctico:</h2>
+            <p>{{ sintactico[0] }}</p>
             {% endif %}
         </div>
     </div>

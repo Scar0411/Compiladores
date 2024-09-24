@@ -1,111 +1,77 @@
 /* Estilo para el cuerpo de la página */
 body {
     font-family: Arial, sans-serif;
-    background-color: #ffffff;
-    color: #000000;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+    background-color: #000;
+    color: #fff;
     margin: 0;
+    padding: 0;
 }
 
 /* Contenedor principal */
 .container {
-    background-color: #f0f0f0;
+    background-color: #1c1c1c;
     padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: 80%;
-    max-width: 700px;
-    text-align: center;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+    max-width: 800px;
+    margin: 20px auto;
+    overflow: hidden;
+}
+
+/* Contenedor con desplazamiento fijo para el formulario */
+.form-container {
+    background-color: #1c1c1c;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(255, 255, 255, 0.1);
 }
 
 /* Título principal */
 h1 {
-    color: #000000;
+    color: #fff;
+    text-align: center;
 }
 
 /* Estilo para el textarea */
 textarea {
     width: 100%;
-    height: 200px;
+    height: 150px;
     padding: 15px;
-    border: 1px solid #000000;
+    border: 1px solid #555;
     border-radius: 4px;
     font-size: 16px;
-    margin-bottom: 20px;
-    resize: vertical;
-    background-color: #ffffff;
-    color: #000000;
-    box-sizing: border-box; /* Asegura que el padding y el borde estén incluidos en el ancho total */
+    margin-bottom: 10px;
+    background-color: #000;
+    color: #fff;
 }
 
-/* Estilo para los inputs de texto */
-input[type="text"] {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #000000;
-    border-radius: 4px;
-    font-size: 16px;
-    margin-bottom: 20px; /* Margen inferior para separar los campos */
-    background-color: #f0f0f0;
-    color: #000000;
-    cursor: not-allowed; /* Muestra un cursor de no permitido para indicar que no se puede editar */
-}
-
-/* Estilo para las etiquetas y grupos de entrada */
-label {
-    display: block;
-    text-align: left;
-    margin-bottom: 5px;
-    color: #000000;
-}
-
-/* Estilo para la fila de inputs */
-.input-row {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 20px;
-}
-
-/* Estilo para las columnas de inputs */
-.input-column {
-    width: 48%; /* Ajusta el ancho de las columnas */
-}
-
-/* Estilo para el contenedor de botones */
+/* Botones */
 .button-container {
     display: flex;
-    justify-content: space-between; /* Distribuye los botones a lo largo del contenedor */
-    margin-top: 20px;
+    justify-content: space-between;
+    margin-top: 10px;
 }
 
-/* Estilo para los botones */
 button {
-    background-color: #000000; /* Negro */
-    color: #ffffff; /* Blanco */
+    background-color: #555;
+    color: #fff;
     padding: 10px 20px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
     font-size: 16px;
-    width: 48%; /* Ajusta el ancho de los botones */
+    width: 48%;
 }
 
 button:hover {
-    background-color: #333333; /* Gris oscuro al pasar el mouse */
+    background-color: #333;
 }
 
-/* Estilo para el botón Limpiar */
 button.clear {
-    background-color: #000000; /* Color de fondo negro */
-    color: #ffffff; /* Color del texto blanco */
-    border: 1px solid #ffffff; /* Borde blanco */
+    background-color: #888;
 }
 
 button.clear:hover {
-    background-color: #333333; /* Gris oscuro al pasar el mouse */
+    background-color: #666;
 }
 
 /* Estilo para la tabla de resultados */
@@ -117,36 +83,40 @@ table {
 
 th, td {
     padding: 10px;
-    border: 1px solid #000000;
+    border: 1px solid #555;
     text-align: left;
+    color: #fff;
 }
 
 th {
-    background-color: #e0e0e0;
-    color: #000000;
+    background-color: #333;
     font-weight: bold;
 }
 
-td {
-    background-color: #ffffff;
-    color: #000000;
+/* Estilo para los mensajes */
+.token-info {
+    margin-top: 20px;
 }
 
-/* Estilo para el historial de tokens */
-h2 {
-    color: #000000;
-    margin-top: 30px;
+.token-info p {
+    margin: 5px 0;
+    color: #fff;
+}
+
+/* Estilo para los errores sintácticos */
+#sintactico {
+    margin-top: 20px;
+    color: #fff;
 }
 
 ul {
-    text-align: left;
-    padding-left: 20px;
-    color: #000000;
+    list-style-type: none;
+    padding-left: 0;
 }
 
-/* Estilo para el pie de página */
-footer {
-    margin-top: 30px;
-    font-size: 14px;
-    color: #000000;
+ul li {
+    padding: 10px;
+    background-color: #333;
+    margin-bottom: 5px;
+    border-left: 5px solid #555;
 }
