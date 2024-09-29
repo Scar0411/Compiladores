@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'BREAK ELSE FALSE FOR IF INT LLADER LLAIZQ PARDER PARIZQ PRINT RETURN SYSTEMOUT TRUE WHILE cadena entero identificador igual mayorigual punto puntoycoma sumafor_loop : FOR PARIZQ INT identificador igual entero puntoycoma identificador mayorigual entero puntoycoma identificador suma suma PARDER LLAIZQ statement LLADERstatement : SYSTEMOUT PARIZQ cadena suma identificador PARDER puntoycoma'
+_lr_signature = 'BREAK ELSE FALSE FOR IF INT LLADER LLAIZQ PARDER PARIZQ PRINT RETURN SYSTEMOUT TRUE WHILE cadena entero identificador igual incremento mayor mayorigual menor menorigual punto puntoycoma sumafor_loop : FOR PARIZQ variable_declaracion puntoycoma condicion puntoycoma incremento_statement PARDER LLAIZQ statement LLADERvariable_declaracion : INT identificador igual enterovariable_declaracion_error : INT error igual enteroincremento_statement : identificador incrementocondicion : identificador operador_comparacion entero\n                 | condicion_errorcondicion_error : identificador enterooperador_comparacion : menor\n                            | mayor\n                            | menorigual\n                            | mayorigual\n                            | igualcondicion : identificador operador_comparacion errorstatement : SYSTEMOUT PARIZQ cadena suma identificador PARDER puntoycoma\n                 | error_missing_closing_braceerror_missing_closing_brace : LLAIZQ statement'
     
-_lr_action_items = {'FOR':([0,],[2,]),'$end':([1,20,],[0,-1,]),'PARIZQ':([2,19,],[3,21,]),'INT':([3,],[4,]),'identificador':([4,8,12,23,],[5,9,13,24,]),'igual':([5,],[6,]),'entero':([6,10,],[7,11,]),'puntoycoma':([7,11,25,],[8,12,26,]),'mayorigual':([9,],[10,]),'suma':([13,14,22,],[14,15,23,]),'PARDER':([15,24,],[16,25,]),'LLAIZQ':([16,],[17,]),'SYSTEMOUT':([17,],[19,]),'LLADER':([18,26,],[20,-2,]),'cadena':([21,],[22,]),}
+_lr_action_items = {'FOR':([0,],[2,]),'$end':([1,33,],[0,-1,]),'PARIZQ':([2,30,],[3,34,]),'INT':([3,],[5,]),'puntoycoma':([4,8,10,14,20,23,24,38,],[6,12,-6,-7,-2,-5,-13,39,]),'identificador':([5,6,12,36,],[7,9,22,37,]),'igual':([7,9,],[11,19,]),'entero':([9,11,13,15,16,17,18,19,],[14,20,23,-8,-9,-10,-11,-12,]),'menor':([9,],[15,]),'mayor':([9,],[16,]),'menorigual':([9,],[17,]),'mayorigual':([9,],[18,]),'error':([13,15,16,17,18,19,],[24,-8,-9,-10,-11,-12,]),'PARDER':([21,26,37,],[25,-4,38,]),'incremento':([22,],[26,]),'LLAIZQ':([25,27,28,],[27,28,28,]),'SYSTEMOUT':([27,28,],[30,30,]),'LLADER':([29,31,32,39,],[33,-15,-16,-14,]),'cadena':([34,],[35,]),'suma':([35,],[36,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'for_loop':([0,],[1,]),'statement':([17,],[18,]),}
+_lr_goto_items = {'for_loop':([0,],[1,]),'variable_declaracion':([3,],[4,]),'condicion':([6,],[8,]),'condicion_error':([6,],[10,]),'operador_comparacion':([9,],[13,]),'incremento_statement':([12,],[21,]),'statement':([27,28,],[29,32,]),'error_missing_closing_brace':([27,28,],[31,31,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -27,6 +27,20 @@ for _k, _v in _lr_goto_items.items():
 del _lr_goto_items
 _lr_productions = [
   ("S' -> for_loop","S'",1,None,None,None),
-  ('for_loop -> FOR PARIZQ INT identificador igual entero puntoycoma identificador mayorigual entero puntoycoma identificador suma suma PARDER LLAIZQ statement LLADER','for_loop',18,'p_for_loop','analizador_lexico.py',77),
-  ('statement -> SYSTEMOUT PARIZQ cadena suma identificador PARDER puntoycoma','statement',7,'p_statement','analizador_lexico.py',81),
+  ('for_loop -> FOR PARIZQ variable_declaracion puntoycoma condicion puntoycoma incremento_statement PARDER LLAIZQ statement LLADER','for_loop',11,'p_for_loop','analizador_lexico.py',98),
+  ('variable_declaracion -> INT identificador igual entero','variable_declaracion',4,'p_variable_declaracion','analizador_lexico.py',103),
+  ('variable_declaracion_error -> INT error igual entero','variable_declaracion_error',4,'p_variable_declaracion_error','analizador_lexico.py',109),
+  ('incremento_statement -> identificador incremento','incremento_statement',2,'p_incremento_statement','analizador_lexico.py',116),
+  ('condicion -> identificador operador_comparacion entero','condicion',3,'p_condicion','analizador_lexico.py',121),
+  ('condicion -> condicion_error','condicion',1,'p_condicion','analizador_lexico.py',122),
+  ('condicion_error -> identificador entero','condicion_error',2,'p_condicion_error','analizador_lexico.py',131),
+  ('operador_comparacion -> menor','operador_comparacion',1,'p_operador_comparacion','analizador_lexico.py',138),
+  ('operador_comparacion -> mayor','operador_comparacion',1,'p_operador_comparacion','analizador_lexico.py',139),
+  ('operador_comparacion -> menorigual','operador_comparacion',1,'p_operador_comparacion','analizador_lexico.py',140),
+  ('operador_comparacion -> mayorigual','operador_comparacion',1,'p_operador_comparacion','analizador_lexico.py',141),
+  ('operador_comparacion -> igual','operador_comparacion',1,'p_operador_comparacion','analizador_lexico.py',142),
+  ('condicion -> identificador operador_comparacion error','condicion',3,'p_condicion_incompleta','analizador_lexico.py',147),
+  ('statement -> SYSTEMOUT PARIZQ cadena suma identificador PARDER puntoycoma','statement',7,'p_statement','analizador_lexico.py',154),
+  ('statement -> error_missing_closing_brace','statement',1,'p_statement','analizador_lexico.py',155),
+  ('error_missing_closing_brace -> LLAIZQ statement','error_missing_closing_brace',2,'p_error_missing_closing_brace','analizador_lexico.py',160),
 ]
