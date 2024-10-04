@@ -1,0 +1,112 @@
+/* Estilo para el cuerpo de la página */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #fff; /* Fondo blanco */
+    color: #000; /* Texto negro */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+}
+
+/* Contenedor principal */
+.container {
+    background-color: #fff; /* Fondo blanco */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2); /* Sombra en negro */
+    width: 90%;
+    max-width: 900px;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+/* Título principal */
+h1 {
+    color: #000; /* Texto negro */
+    margin-bottom: 20px;
+}
+
+/* Estilo para el textarea */
+textarea {
+    width: 100%;
+    max-width: 100%;
+    min-width: 100%;
+    height: 150px;
+    padding: 15px;
+    border: 1px solid #000; /* Borde negro */
+    border-radius: 5px;
+    font-size: 16px;
+    margin-bottom: 20px;
+    resize: vertical;
+    box-sizing: border-box;
+    background-color: #fff; /* Fondo blanco */
+    color: #000; /* Texto negro */
+}
+
+/* Botones principales */
+.button-group {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+/* Estilo para los botones */
+button {
+    background-color: #000; /* Fondo negro */
+    color: white; /* Texto blanco */
+    padding: 10px 25px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin: 5px;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #333; /* Color gris oscuro en hover */
+}
+
+/* Estilo para la tabla de resultados */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    padding: 10px;
+    border: 1px solid #000; /* Borde negro */
+    text-align: center;
+}
+
+th {
+    background-color: #000; /* Fondo negro */
+    color: white; /* Texto blanco */
+}
+
+td {
+    background-color: #f9f9f9; /* Fondo gris claro */
+    color: #000; /* Texto negro */
+}
+
+/* Estilo para el pie de página */
+footer {
+    margin-top: 30px;
+    font-size: 14px;
+    color: #000; /* Texto negro */
+}
+
+/* Para pantallas más pequeñas */
+@media (max-width: 768px) {
+    .button-group {
+        flex-direction: column;
+    }
+    button {
+        width: 100%;
+    }
+}

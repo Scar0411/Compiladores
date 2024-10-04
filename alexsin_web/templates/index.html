@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analizador Léxico y Sintáctico</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Analizador Léxico y Sintáctico</h1>
+        <form method="POST" action="/lexical">
+            <textarea name="code" placeholder="Introduce el código aquí...">{{ code }}</textarea>
+            <div class="button-group">
+                <button type="submit">Análisis Léxico</button>
+                <button type="submit" formaction="/syntactic">Análisis Sintáctico</button>
+                <button type="submit" formaction="/clear">Borrar</button>
+            </div>
+        </form>
+
+        {% if lexical_results %}
+        <h2>Resultados Léxicos</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>TOKEN</th>
+                    <th>PR</th>
+                    <th>ID</th>
+                    <th>CAD</th>
+                    <th>NUM</th>
+                    <th>SIM</th>
+                    <th>TIPO</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for result in lexical_results %}
+                <tr>
+                    <td>{{ result.token }}</td>
+                    <td>{{ result.pr }}</td>
+                    <td>{{ result.id }}</td>
+                    <td>{{ result.cad }}</td>
+                    <td>{{ result.num }}</td>
+                    <td>{{ result.simbolo }}</td>
+                    <td>{{ result.tipo }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+
+        {% if syntactic_results %}
+        <h2>Resultados Sintácticos</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Línea</th>
+                    <th>Detalle</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for result in syntactic_results %}
+                <tr>
+                    <td>{{ result.linea }}</td>
+                    <td>{{ result.detalle }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+
+        <footer>
+            <p><span class="Alumno">Alumno: Oscar Abel Torres Gomez</span></p>
+            <p><span class="Matricula">Matricula: A221686</span></p>
+        </footer>
+    </div>
+</body>
+</html>
