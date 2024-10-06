@@ -18,11 +18,38 @@
             </div>
         </form>
 
+        {% if counters %}
+        <h2>Contador de Tokens</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Palabras Reservadas</th>
+                    <th>Identificadores</th>
+                    <th>Cadenas</th>
+                    <th>Números</th>
+                    <th>Símbolos</th>
+                    <th>Total de Tokens</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ counters['Reservada'] }}</td>
+                    <td>{{ counters['Identificador'] }}</td>
+                    <td>{{ counters['Cadena'] }}</td>
+                    <td>{{ counters['Numero'] }}</td>
+                    <td>{{ counters['Simbolo'] }}</td>
+                    <td>{{ counters['Total'] }}</td>
+                </tr>
+            </tbody>
+        </table>
+        {% endif %}
+
         {% if lexical_results %}
         <h2>Resultados Léxicos</h2>
         <table>
             <thead>
                 <tr>
+                    <th>Línea</th>
                     <th>TOKEN</th>
                     <th>PR</th>
                     <th>ID</th>
@@ -35,6 +62,7 @@
             <tbody>
                 {% for result in lexical_results %}
                 <tr>
+                    <td>{{ result.linea }}</td>
                     <td>{{ result.token }}</td>
                     <td>{{ result.pr }}</td>
                     <td>{{ result.id }}</td>
@@ -48,24 +76,13 @@
         </table>
         {% endif %}
 
-        {% if syntactic_results %}
+        {% if syntax_errors %}
         <h2>Resultados Sintácticos</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>Línea</th>
-                    <th>Detalle</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for result in syntactic_results %}
-                <tr>
-                    <td>{{ result.linea }}</td>
-                    <td>{{ result.detalle }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        <textarea readonly rows="5" style="width: 100%;">{{ syntax_errors }}</textarea>
+        {% endif %}
+
+        {% if syntactic_result %}
+        <h2 style="color: green;">{{ syntactic_result }}</h2>
         {% endif %}
 
         <footer>

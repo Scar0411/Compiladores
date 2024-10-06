@@ -2,13 +2,14 @@
 body {
     font-family: Arial, sans-serif;
     background-color: #fff; /* Fondo blanco */
-    color: #000; /* Texto negro */
+    color: #000; /* Texto negro para buen contraste */
     display: flex;
     justify-content: center;
-    align-items: center;
-    height: 100vh;
+    align-items: flex-start; /* Cambiado a flex-start */
+    min-height: 100vh; /* Asegurar que ocupe al menos el 100% de la altura */
     margin: 0;
     padding: 0;
+    overflow-y: auto; /* Permitir el desplazamiento vertical si es necesario */
 }
 
 /* Contenedor principal */
@@ -16,11 +17,13 @@ body {
     background-color: #fff; /* Fondo blanco */
     padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2); /* Sombra en negro */
+    box-shadow: 0 0 15px rgba(255, 0, 0, 0.5); /* Sombra roja */
     width: 90%;
     max-width: 900px;
     text-align: center;
     box-sizing: border-box;
+    margin-top: 50px; /* Espacio superior para bajarlo un poco */
+    margin-bottom: 50px; /* Reducido para evitar mucho espacio debajo */
 }
 
 /* Título principal */
@@ -36,7 +39,7 @@ textarea {
     min-width: 100%;
     height: 150px;
     padding: 15px;
-    border: 1px solid #000; /* Borde negro */
+    border: 2px solid #ff0000; /* Borde rojo */
     border-radius: 5px;
     font-size: 16px;
     margin-bottom: 20px;
@@ -56,41 +59,42 @@ textarea {
 
 /* Estilo para los botones */
 button {
-    background-color: #000; /* Fondo negro */
-    color: white; /* Texto blanco */
+    background-color: #fff; /* Fondo blanco */
+    color: #000; /* Texto negro */
     padding: 10px 25px;
-    border: none;
+    border: 2px solid #ff0000; /* Borde rojo */
     border-radius: 5px;
     cursor: pointer;
     font-size: 16px;
     margin: 5px;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s, color 0.3s; /* Transición suave para hover */
 }
 
 button:hover {
-    background-color: #333; /* Color gris oscuro en hover */
+    background-color: #ff0000; /* Fondo rojo en hover */
+    color: white; /* Texto blanco en hover */
 }
 
 /* Estilo para la tabla de resultados */
 table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 20px;
+    margin-top: 10px; /* Reducido para acercar la tabla al contenido */
 }
 
 th, td {
     padding: 10px;
-    border: 1px solid #000; /* Borde negro */
+    border: 2px solid #ff0000; /* Borde rojo */
     text-align: center;
 }
 
 th {
-    background-color: #000; /* Fondo negro */
+    background-color: #ff0000; /* Fondo rojo */
     color: white; /* Texto blanco */
 }
 
 td {
-    background-color: #f9f9f9; /* Fondo gris claro */
+    background-color: #fff; /* Fondo blanco */
     color: #000; /* Texto negro */
 }
 
