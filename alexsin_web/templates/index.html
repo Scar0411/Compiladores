@@ -14,7 +14,8 @@
             <div class="button-group">
                 <button type="submit">Análisis Léxico</button>
                 <button type="submit" formaction="/syntactic">Análisis Sintáctico</button>
-                <button type="submit" formaction="/clear">Borrar</button>
+                <!-- El botón de borrar ahora envía una solicitud POST al servidor y no afecta el análisis -->
+                <button type="submit" formaction="/clear" formmethod="POST">Borrar</button>
             </div>
         </form>
 
@@ -77,7 +78,7 @@
         {% endif %}
 
         {% if syntax_errors %}
-        <h2>Errores Sintácticos</h2>  <!-- Cambié el título para ser más descriptivo -->
+        <h2>Errores Sintácticos</h2>
         <textarea readonly rows="5" style="width: 100%;">{{ syntax_errors }}</textarea>
         {% endif %}
 
@@ -92,4 +93,3 @@
     </div>
 </body>
 </html>
-

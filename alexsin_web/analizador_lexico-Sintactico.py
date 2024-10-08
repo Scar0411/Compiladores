@@ -185,6 +185,9 @@ def syntactic_analysis():
     declared_variables = set()
     int_declared = False
     expected_variables = {'a', 'b', 'c'}
+    end_present = False  # Variable para verificar si 'end' está presente
+    program_present = False  # Verificar si 'program' está presente
+    suma_present = False  # Verificar si 'suma' está presente
 
     # 1. Verificar la llave de inicio '{' solo en la primera línea
     if lines and '{' not in lines[0]:
@@ -200,6 +203,18 @@ def syntactic_analysis():
 
     # Recorrer las líneas de código para otros errores
     for i, line in enumerate(lines):
+        # Comprobar si la palabra 'end' está presente
+        if 'end' in line:
+            end_present = True
+
+        # Comprobar si 'program' está presente
+        if 'program' in line:
+            program_present = True
+
+        # Comprobar si 'suma' está presente
+        if 'suma' in line:
+            suma_present = True
+
         # Comprobar declaración de variables
         if 'int' in line:  # Verificar si se declara 'int'
             int_declared = True
@@ -240,6 +255,18 @@ def syntactic_analysis():
     if not int_declared:  # Se asegura de verificar si 'int' fue declarado
         syntax_errors.append("Error: palabra reservada 'int' no declarada.")
 
+    # Verificar si la palabra reservada 'end' falta
+    if not end_present:
+        syntax_errors.append("Error: sintaxis palabra reservada 'end' faltante.")
+
+    # Verificar si falta el identificador 'program'
+    if not program_present:
+        syntax_errors.append("Error de sintaxis: identificador 'program' faltante.")
+
+    # Verificar si falta el identificador 'suma'
+    if not suma_present:
+        syntax_errors.append("Error de sintaxis: identificador 'suma' faltante.")
+
     # Si no hay errores, establecer el resultado sintáctico correcto
     syntactic_result = None
     if not syntax_errors:
@@ -249,7 +276,8 @@ def syntactic_analysis():
 
 @app.route('/clear', methods=['POST'])
 def clear():
-    return redirect(url_for('index'))
+    # Renderiza la página con todos los valores vacíos
+    return render_template('index.html', lexical_results=None, syntactic_result=None, syntax_errors=None, counters=None, code='')
 
 if __name__ == '__main__':
     app.run(debug=True)
