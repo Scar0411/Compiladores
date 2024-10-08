@@ -1,0 +1,392 @@
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Unused terminals:
+
+    ELSE
+    FOR
+    IF
+    NUMBER
+    QUOTE
+    RBRACE
+    WHILE
+
+Grammar
+
+Rule 0     S' -> program
+Rule 1     program -> ID LBRACE declarations statements END
+Rule 2     declarations -> type ID COMMA ID COMMA ID SEMICOLON
+Rule 3     declarations -> type ID SEMICOLON
+Rule 4     type -> INT
+Rule 5     statements -> statement statements
+Rule 6     statements -> statement
+Rule 7     statement -> READ ID SEMICOLON
+Rule 8     statement -> ID EQUALS expression SEMICOLON
+Rule 9     statement -> PRINT LPAREN STRING RPAREN SEMICOLON
+Rule 10    expression -> ID PLUS ID
+Rule 11    expression -> ID MINUS ID
+Rule 12    expression -> ID TIMES ID
+Rule 13    expression -> ID DIVIDE ID
+
+Terminals, with rules where they appear
+
+COMMA                : 2 2
+DIVIDE               : 13
+ELSE                 : 
+END                  : 1
+EQUALS               : 8
+FOR                  : 
+ID                   : 1 2 2 2 3 7 8 10 10 11 11 12 12 13 13
+IF                   : 
+INT                  : 4
+LBRACE               : 1
+LPAREN               : 9
+MINUS                : 11
+NUMBER               : 
+PLUS                 : 10
+PRINT                : 9
+QUOTE                : 
+RBRACE               : 
+READ                 : 7
+RPAREN               : 9
+SEMICOLON            : 2 3 7 8 9
+STRING               : 9
+TIMES                : 12
+WHILE                : 
+error                : 
+
+Nonterminals, with rules where they appear
+
+declarations         : 1
+expression           : 8
+program              : 0
+statement            : 5 6
+statements           : 1 5
+type                 : 2 3
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . program
+    (1) program -> . ID LBRACE declarations statements END
+
+    ID              shift and go to state 2
+
+    program                        shift and go to state 1
+
+state 1
+
+    (0) S' -> program .
+
+
+
+state 2
+
+    (1) program -> ID . LBRACE declarations statements END
+
+    LBRACE          shift and go to state 3
+
+
+state 3
+
+    (1) program -> ID LBRACE . declarations statements END
+    (2) declarations -> . type ID COMMA ID COMMA ID SEMICOLON
+    (3) declarations -> . type ID SEMICOLON
+    (4) type -> . INT
+
+    INT             shift and go to state 6
+
+    declarations                   shift and go to state 4
+    type                           shift and go to state 5
+
+state 4
+
+    (1) program -> ID LBRACE declarations . statements END
+    (5) statements -> . statement statements
+    (6) statements -> . statement
+    (7) statement -> . READ ID SEMICOLON
+    (8) statement -> . ID EQUALS expression SEMICOLON
+    (9) statement -> . PRINT LPAREN STRING RPAREN SEMICOLON
+
+    READ            shift and go to state 10
+    ID              shift and go to state 7
+    PRINT           shift and go to state 11
+
+    statements                     shift and go to state 8
+    statement                      shift and go to state 9
+
+state 5
+
+    (2) declarations -> type . ID COMMA ID COMMA ID SEMICOLON
+    (3) declarations -> type . ID SEMICOLON
+
+    ID              shift and go to state 12
+
+
+state 6
+
+    (4) type -> INT .
+
+    ID              reduce using rule 4 (type -> INT .)
+
+
+state 7
+
+    (8) statement -> ID . EQUALS expression SEMICOLON
+
+    EQUALS          shift and go to state 13
+
+
+state 8
+
+    (1) program -> ID LBRACE declarations statements . END
+
+    END             shift and go to state 14
+
+
+state 9
+
+    (5) statements -> statement . statements
+    (6) statements -> statement .
+    (5) statements -> . statement statements
+    (6) statements -> . statement
+    (7) statement -> . READ ID SEMICOLON
+    (8) statement -> . ID EQUALS expression SEMICOLON
+    (9) statement -> . PRINT LPAREN STRING RPAREN SEMICOLON
+
+    END             reduce using rule 6 (statements -> statement .)
+    READ            shift and go to state 10
+    ID              shift and go to state 7
+    PRINT           shift and go to state 11
+
+    statement                      shift and go to state 9
+    statements                     shift and go to state 15
+
+state 10
+
+    (7) statement -> READ . ID SEMICOLON
+
+    ID              shift and go to state 16
+
+
+state 11
+
+    (9) statement -> PRINT . LPAREN STRING RPAREN SEMICOLON
+
+    LPAREN          shift and go to state 17
+
+
+state 12
+
+    (2) declarations -> type ID . COMMA ID COMMA ID SEMICOLON
+    (3) declarations -> type ID . SEMICOLON
+
+    COMMA           shift and go to state 18
+    SEMICOLON       shift and go to state 19
+
+
+state 13
+
+    (8) statement -> ID EQUALS . expression SEMICOLON
+    (10) expression -> . ID PLUS ID
+    (11) expression -> . ID MINUS ID
+    (12) expression -> . ID TIMES ID
+    (13) expression -> . ID DIVIDE ID
+
+    ID              shift and go to state 20
+
+    expression                     shift and go to state 21
+
+state 14
+
+    (1) program -> ID LBRACE declarations statements END .
+
+    $end            reduce using rule 1 (program -> ID LBRACE declarations statements END .)
+
+
+state 15
+
+    (5) statements -> statement statements .
+
+    END             reduce using rule 5 (statements -> statement statements .)
+
+
+state 16
+
+    (7) statement -> READ ID . SEMICOLON
+
+    SEMICOLON       shift and go to state 22
+
+
+state 17
+
+    (9) statement -> PRINT LPAREN . STRING RPAREN SEMICOLON
+
+    STRING          shift and go to state 23
+
+
+state 18
+
+    (2) declarations -> type ID COMMA . ID COMMA ID SEMICOLON
+
+    ID              shift and go to state 24
+
+
+state 19
+
+    (3) declarations -> type ID SEMICOLON .
+
+    READ            reduce using rule 3 (declarations -> type ID SEMICOLON .)
+    ID              reduce using rule 3 (declarations -> type ID SEMICOLON .)
+    PRINT           reduce using rule 3 (declarations -> type ID SEMICOLON .)
+
+
+state 20
+
+    (10) expression -> ID . PLUS ID
+    (11) expression -> ID . MINUS ID
+    (12) expression -> ID . TIMES ID
+    (13) expression -> ID . DIVIDE ID
+
+    PLUS            shift and go to state 25
+    MINUS           shift and go to state 26
+    TIMES           shift and go to state 27
+    DIVIDE          shift and go to state 28
+
+
+state 21
+
+    (8) statement -> ID EQUALS expression . SEMICOLON
+
+    SEMICOLON       shift and go to state 29
+
+
+state 22
+
+    (7) statement -> READ ID SEMICOLON .
+
+    READ            reduce using rule 7 (statement -> READ ID SEMICOLON .)
+    ID              reduce using rule 7 (statement -> READ ID SEMICOLON .)
+    PRINT           reduce using rule 7 (statement -> READ ID SEMICOLON .)
+    END             reduce using rule 7 (statement -> READ ID SEMICOLON .)
+
+
+state 23
+
+    (9) statement -> PRINT LPAREN STRING . RPAREN SEMICOLON
+
+    RPAREN          shift and go to state 30
+
+
+state 24
+
+    (2) declarations -> type ID COMMA ID . COMMA ID SEMICOLON
+
+    COMMA           shift and go to state 31
+
+
+state 25
+
+    (10) expression -> ID PLUS . ID
+
+    ID              shift and go to state 32
+
+
+state 26
+
+    (11) expression -> ID MINUS . ID
+
+    ID              shift and go to state 33
+
+
+state 27
+
+    (12) expression -> ID TIMES . ID
+
+    ID              shift and go to state 34
+
+
+state 28
+
+    (13) expression -> ID DIVIDE . ID
+
+    ID              shift and go to state 35
+
+
+state 29
+
+    (8) statement -> ID EQUALS expression SEMICOLON .
+
+    READ            reduce using rule 8 (statement -> ID EQUALS expression SEMICOLON .)
+    ID              reduce using rule 8 (statement -> ID EQUALS expression SEMICOLON .)
+    PRINT           reduce using rule 8 (statement -> ID EQUALS expression SEMICOLON .)
+    END             reduce using rule 8 (statement -> ID EQUALS expression SEMICOLON .)
+
+
+state 30
+
+    (9) statement -> PRINT LPAREN STRING RPAREN . SEMICOLON
+
+    SEMICOLON       shift and go to state 36
+
+
+state 31
+
+    (2) declarations -> type ID COMMA ID COMMA . ID SEMICOLON
+
+    ID              shift and go to state 37
+
+
+state 32
+
+    (10) expression -> ID PLUS ID .
+
+    SEMICOLON       reduce using rule 10 (expression -> ID PLUS ID .)
+
+
+state 33
+
+    (11) expression -> ID MINUS ID .
+
+    SEMICOLON       reduce using rule 11 (expression -> ID MINUS ID .)
+
+
+state 34
+
+    (12) expression -> ID TIMES ID .
+
+    SEMICOLON       reduce using rule 12 (expression -> ID TIMES ID .)
+
+
+state 35
+
+    (13) expression -> ID DIVIDE ID .
+
+    SEMICOLON       reduce using rule 13 (expression -> ID DIVIDE ID .)
+
+
+state 36
+
+    (9) statement -> PRINT LPAREN STRING RPAREN SEMICOLON .
+
+    READ            reduce using rule 9 (statement -> PRINT LPAREN STRING RPAREN SEMICOLON .)
+    ID              reduce using rule 9 (statement -> PRINT LPAREN STRING RPAREN SEMICOLON .)
+    PRINT           reduce using rule 9 (statement -> PRINT LPAREN STRING RPAREN SEMICOLON .)
+    END             reduce using rule 9 (statement -> PRINT LPAREN STRING RPAREN SEMICOLON .)
+
+
+state 37
+
+    (2) declarations -> type ID COMMA ID COMMA ID . SEMICOLON
+
+    SEMICOLON       shift and go to state 38
+
+
+state 38
+
+    (2) declarations -> type ID COMMA ID COMMA ID SEMICOLON .
+
+    READ            reduce using rule 2 (declarations -> type ID COMMA ID COMMA ID SEMICOLON .)
+    ID              reduce using rule 2 (declarations -> type ID COMMA ID COMMA ID SEMICOLON .)
+    PRINT           reduce using rule 2 (declarations -> type ID COMMA ID COMMA ID SEMICOLON .)
+

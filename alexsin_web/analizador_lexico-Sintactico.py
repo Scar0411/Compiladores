@@ -1,105 +1,203 @@
 from flask import Flask, render_template, request, redirect, url_for
+import ply.lex as lex
+import ply.yacc as yacc
 import re
 
 app = Flask(__name__)
 
-# Definir los tokens para el análisis léxico
-lexical_tokens = {
-    'for': 'Reservada For',
-    'do': 'Reservada Do',
-    'while': 'Reservada While',
-    'if': 'Reservada If',
-    'else': 'Reservada Else',
-    'int': 'Tipo Entero',
-    'float': 'Tipo Flotante',
-    'char': 'Tipo Carácter',
-    'string': 'Tipo Cadena',
+# Definición de tokens para el analizador léxico
+tokens = (
+    'ID', 'NUMBER', 'STRING', 'PLUS', 'MINUS', 'TIMES', 'DIVIDE', 
+    'IF', 'ELSE', 'WHILE', 'FOR', 'EQUALS', 'LPAREN', 'RPAREN', 
+    'LBRACE', 'RBRACE', 'COMMA', 'SEMICOLON', 'QUOTE', 'INT', 
+    'READ', 'PRINT', 'END'
+)
+
+# Definición de los nuevos símbolos
+t_LPAREN = r'\('
+t_RPAREN = r'\)'
+t_LBRACE = r'\{'
+t_RBRACE = r'\}'
+t_COMMA = r','
+t_SEMICOLON = r';'
+t_QUOTE = r'\"'
+
+t_PLUS = r'\+'
+t_MINUS = r'-'
+t_TIMES = r'\*'
+t_DIVIDE = r'/'
+t_EQUALS = r'='
+
+# Palabras reservadas
+reserved = {
+    'if': 'IF',
+    'else': 'ELSE',
+    'while': 'WHILE',
+    'for': 'FOR',
+    'int': 'INT',
+    'read': 'READ',
+    'printf': 'PRINT',
+    'end': 'END'
 }
 
-# Historial de tokens analizados
-lexical_history = []
-syntactic_history = []
+# Reglas simples de tokens
+t_ignore = ' \t'
+
+def t_ID(t):
+    r'[a-zA-Z_][a-zA-Z_0-9]*'
+    t.type = reserved.get(t.value, 'ID')  # Check for reserved words
+    return t
+
+def t_NUMBER(t):
+    r'\d+'
+    t.value = int(t.value)
+    return t
+
+def t_STRING(t):
+    r'\"([^\\\n]|(\\.))*?\"'
+    return t
+
+def t_newline(t):
+    r'\n+'
+    t.lexer.lineno += t.value.count('\n')
+
+def t_error(t):
+    print(f"Carácter ilegal '{t.value[0]}' en línea {t.lexer.lineno}")
+    t.lexer.skip(1)
+
+lexer = lex.lex()
+
+# Analizador sintáctico
+def p_program(p):
+    '''program : ID LBRACE declarations statements END'''
+    pass
+
+def p_declarations(p):
+    '''declarations : type ID COMMA ID COMMA ID SEMICOLON
+                    | type ID SEMICOLON'''
+    pass
+
+def p_type(p):
+    '''type : INT'''
+    pass
+
+def p_statements(p):
+    '''statements : statement statements
+                  | statement'''
+    pass
+
+def p_statement_read(p):
+    '''statement : READ ID SEMICOLON'''
+    pass
+
+def p_statement_assign(p):
+    '''statement : ID EQUALS expression SEMICOLON'''
+    pass
+
+def p_statement_print(p):
+    '''statement : PRINT LPAREN STRING RPAREN SEMICOLON'''
+    pass
+
+def p_expression_binop(p):
+    '''expression : ID PLUS ID
+                  | ID MINUS ID
+                  | ID TIMES ID
+                  | ID DIVIDE ID'''
+    pass
+
+def p_error(p):
+    if p:
+        error_msg = f"Error de sintaxis en '{p.value}' en la línea {p.lineno}. "
+        if p.type in ['ID', 'INT', 'READ', 'PRINT', 'END']:
+            error_msg += f"Se esperaba un símbolo o palabra reservada."
+        else:
+            error_msg += f"Token inesperado."
+        print(error_msg)  # Para depuración en la consola
+        return error_msg
+    else:
+        return "Error de sintaxis al final del archivo. Verifica que todos los bloques están correctamente cerrados."
+
+parser = yacc.yacc()
 
 @app.route('/')
 def index():
-    return render_template('index.html', lexical_results=[], syntactic_results=[], counters=None, code="", syntax_errors="", syntactic_result="")
+    return render_template('index.html', lexical_results=None, syntactic_result=None, syntax_errors=None, counters=None, code='')
 
 @app.route('/lexical', methods=['POST'])
 def lexical_analysis():
     text = request.form['code']
-    lines = text.splitlines()
+    lexer.lineno = 1  # Reiniciar la cuenta de líneas
+    lexer.input(text)
     lexical_results = []
-
-    # Expresiones regulares para identificar diferentes tipos de tokens
-    token_patterns = {
-        'Cadena': r'"([^"]*)"',      # Cadenas entre comillas
-        'Identificador': r'\b[a-zA-Z_][a-zA-Z0-9_]*\b',  # Identificadores
-        'Numero': r'\b\d+(\.\d+)?\b', # Números enteros y flotantes
-        'Simbolo': r'[{}();,]',       # Símbolos (incluyendo el punto y coma)
-    }
-
-    # Expresión regular para las palabras reservadas
-    reserved_words_pattern = r'\b(?:' + '|'.join(re.escape(key) for key in lexical_tokens.keys()) + r')\b'
-
-    # Unir todas las expresiones en una sola
-    token_regex = '|'.join(f'(?P<{key}>{pattern})' for key, pattern in token_patterns.items()) + f'|(?P<Reservada>{reserved_words_pattern})'
-
-    # Inicializar los contadores
+    
+    # Contadores para los tipos de tokens
     counters = {
         'Reservada': 0,
         'Identificador': 0,
         'Cadena': 0,
         'Numero': 0,
         'Simbolo': 0,
-        'Total': 0  # Contador para el total de tokens
+        'Total': 0
     }
 
-    for i, line in enumerate(lines, start=1):
-        for match in re.finditer(token_regex, line):
-            token_type = match.lastgroup
-            token_value = match.group(token_type)
+    while True:
+        tok = lexer.token()
+        if not tok:
+            break
+        token_info = {
+            'linea': tok.lineno,
+            'token': tok.value,
+            'pr': 'X' if tok.type in ['IF', 'ELSE', 'WHILE', 'FOR', 'INT', 'READ', 'PRINT', 'END'] else '',
+            'id': 'X' if tok.type == 'ID' else '',
+            'cad': 'X' if tok.type == 'STRING' else '',
+            'num': 'X' if tok.type == 'NUMBER' else '',
+            'simbolo': 'X' if tok.type in ['PLUS', 'MINUS', 'TIMES', 'DIVIDE', 'LPAREN', 'RPAREN', 'LBRACE', 'RBRACE', 'COMMA', 'SEMICOLON', 'QUOTE'] else '',
+            'tipo': {
+                'ID': 'Identificador','NUMBER': 'Número','STRING': 'Cadena','PLUS': 'Suma','MINUS': 'Resta','TIMES': 'Multiplicación',
+                'DIVIDE': 'División','IF': 'Si','ELSE': 'Sino','WHILE': 'Mientras','FOR': 'Para','EQUALS': 'Igual','LPAREN': 'Paréntesis Izquierdo',
+                'RPAREN': 'Paréntesis Derecho','LBRACE': 'Llave Izquierda','RBRACE': 'Llave Derecha','COMMA': 'Coma','SEMICOLON': 'Punto y Coma',
+                'QUOTE': 'Comillas','INT': 'Entero','READ': 'Leer','PRINT': 'Imprimir','END': 'Fin'
+            }[tok.type]  # Cambiar a español aquí
+        }
+        lexical_results.append(token_info)
 
-            token_info = {
-                'linea': i,  # Añadimos el número de línea
-                'token': token_value,
-                'pr': 'X' if token_type == 'Reservada' else '',
-                'id': 'X' if token_type == 'Identificador' else '',
-                'cad': 'X' if token_type == 'Cadena' else '',
-                'num': 'X' if token_type == 'Numero' else '',
-                'simbolo': 'X' if token_type == 'Simbolo' else '',
-                'tipo': lexical_tokens.get(token_value, token_type.capitalize())
-            }
-            lexical_results.append(token_info)
-            lexical_history.append(token_info)
+        # Incrementamos el contador según el tipo de token
+        if token_info['pr'] == 'X':
+            counters['Reservada'] += 1
+        if token_info['id'] == 'X':
+            counters['Identificador'] += 1
+        if token_info['cad'] == 'X':
+            counters['Cadena'] += 1
+        if token_info['num'] == 'X':
+            counters['Numero'] += 1
+        if token_info['simbolo'] == 'X':
+            counters['Simbolo'] += 1
 
-            # Incrementar los contadores según el tipo de token
-            counters[token_type] += 1
-            counters['Total'] += 1  # Incrementar el total de tokens
+        counters['Total'] += 1
 
-    return render_template('index.html', lexical_results=lexical_results, syntactic_results=[], counters=counters, code=text)
+    return render_template('index.html', lexical_results=lexical_results, syntactic_result=None, syntax_errors=None, counters=counters, code=text)
 
 @app.route('/syntactic', methods=['POST'])
 def syntactic_analysis():
     text = request.form['code']
-    lines = text.splitlines()
+    lines = text.splitlines()  # Dividir el código en líneas
     syntax_errors = []
-    syntactic_result = ""  # Nueva variable para indicar resultado sintáctico
-
-    # Aquí aplicamos las reglas de errores sintácticos
     declared_variables = set()
-    int_declared = False  # Bandera para verificar si se ha declarado 'int'
+    int_declared = False
+    expected_variables = {'a', 'b', 'c'}
 
     # 1. Verificar la llave de inicio '{' solo en la primera línea
     if lines and '{' not in lines[0]:
         syntax_errors.append("Error de sintaxis: Falta la llave de inicio '{' al inicio del bloque.")
-    
+
     # 2. Verificar la llave de cierre '}' solo en la última línea
     if lines and '}' not in lines[-1]:
         syntax_errors.append("Error de sintaxis: Falta la llave de cierre '}' al final del bloque.")
-    
-    # Variables esperadas
-    expected_variables = {'a', 'b', 'c'}
-    
+
+    # Si hay errores, los retornamos sin intentar el análisis sintáctico
+    if syntax_errors:
+        return render_template('index.html', lexical_results=None, syntactic_result=None, syntax_errors='; '.join(syntax_errors), counters=None, code=text)
+
     # Recorrer las líneas de código para otros errores
     for i, line in enumerate(lines):
         # Comprobar declaración de variables
@@ -123,7 +221,7 @@ def syntactic_analysis():
                 for operand in operands:
                     operand = operand.strip()
                     if not (re.match(r'^\d+$', operand) or operand in declared_variables):
-                        syntax_errors.append(f"Error de sintaxis en la línea {i+1}: Token inesperado '+'.")
+                        syntax_errors.append(f"Error de sintaxis en la línea {i + 1}: Token inesperado '+'.")
                         break
 
         # Comprobar uso de variables no declaradas al asignar
@@ -131,8 +229,8 @@ def syntactic_analysis():
             right_side = line.split('=')[1]
             for variable in declared_variables:
                 if variable not in right_side and variable != '1' and re.match(r'^\d+$', variable):
-                    syntax_errors.append(f"Error: variable '{variable}' no definida en la línea {i+1}.")
-        
+                    syntax_errors.append(f"Error: variable '{variable}' no definida en la línea {i + 1}.")
+
     # Verificar si faltan las variables 'a', 'b', 'c' en la declaración
     missing_variables = expected_variables - declared_variables
     for var in missing_variables:
@@ -143,15 +241,14 @@ def syntactic_analysis():
         syntax_errors.append("Error: palabra reservada 'int' no declarada.")
 
     # Si no hay errores, establecer el resultado sintáctico correcto
+    syntactic_result = None
     if not syntax_errors:
         syntactic_result = "Resultado Sintáctico Correcto"
 
-    return render_template('index.html', lexical_results=[], syntactic_results=[], counters=None, code=text, syntax_errors="\n".join(syntax_errors), syntactic_result=syntactic_result)
+    return render_template('index.html', lexical_results=None, syntactic_result=syntactic_result, syntax_errors='; '.join(syntax_errors), counters=None, code=text)
 
 @app.route('/clear', methods=['POST'])
 def clear():
-    lexical_history.clear()
-    syntactic_history.clear()
     return redirect(url_for('index'))
 
 if __name__ == '__main__':

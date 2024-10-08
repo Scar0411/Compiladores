@@ -2,7 +2,7 @@
 body {
     font-family: Arial, sans-serif;
     background-color: #fff; /* Fondo blanco */
-    color: #000; /* Texto negro para buen contraste */
+    color: #000; /* Texto negro */
     display: flex;
     justify-content: center;
     align-items: flex-start; /* Cambiado a flex-start */
