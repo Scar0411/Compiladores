@@ -14,7 +14,6 @@
             <div class="button-group">
                 <button type="submit">Análisis Léxico</button>
                 <button type="submit" formaction="/syntactic">Análisis Sintáctico</button>
-                <!-- El botón de borrar ahora envía una solicitud POST al servidor y no afecta el análisis -->
                 <button type="submit" formaction="/clear" formmethod="POST">Borrar</button>
             </div>
         </form>
@@ -65,11 +64,11 @@
                 <tr>
                     <td>{{ result.linea }}</td>
                     <td>{{ result.token }}</td>
-                    <td>{{ result.pr }}</td>
-                    <td>{{ result.id }}</td>
-                    <td>{{ result.cad }}</td>
-                    <td>{{ result.num }}</td>
-                    <td>{{ result.simbolo }}</td>
+                    <td>{% if result.tipo == 'Reservada' %}X{% endif %}</td>
+                    <td>{% if result.tipo == 'Identificador' %}X{% endif %}</td>
+                    <td>{% if result.tipo == 'Cadena' %}X{% endif %}</td>
+                    <td>{% if result.tipo == 'Numero' %}X{% endif %}</td>
+                    <td>{% if result.tipo == 'Simbolo' %}X{% endif %}</td>
                     <td>{{ result.tipo }}</td>
                 </tr>
                 {% endfor %}
