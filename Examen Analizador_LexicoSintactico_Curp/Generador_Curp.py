@@ -1,15 +1,16 @@
 from flask import Flask, render_template, request
 import re
+import random
 
 app = Flask(__name__)
 
 # Lista ampliada de palabras prohibidas
 PALABRAS_PROHIBIDAS = [
-    "BACA", "BAKA", "BAKA", "BUEY", "CACA", "CAKA", "CAGA", "CAGO", "CAKA", "CAKO",
-    "COGE", "COJA", "COJE", "COJI", "COJO", "COLA", "CULO", "FETO", "FETO", "GUEY",
+    "BACA", "BAKA", "BUEY", "CACA", "CAKA", "CAGA", "CAGO", "CAKO",
+    "COGE", "COJA", "COJE", "COJI", "COJO", "COLA", "CULO", "FETO", "GUEY",
     "JOTO", "KAKA", "KAGO", "KOJO", "KULO", "MAME", "MAMO", "MEAR", "MEON", "MIAR",
     "MOCO", "MULA", "PEDA", "PEDO", "PENE", "PUTA", "PUTO", "QULO", "RATA", "RUIN",
-    "TETA", "VACA", "VAKA", "VAGO", "VAKA", "VIEJ", "VIEJ", "WUEY"
+    "TETA", "VACA", "VAKA", "VAGO", "VIEJ", "WUEY"
 ]
 
 def limpiar_nombre(nombre):
@@ -50,7 +51,10 @@ def generar_curp(nombre, primer_apellido, segundo_apellido, dia_nacimiento, mes_
         for x in (primer_apellido, segundo_apellido, nombre)
     )
 
-    homoclave = 'XX'
+    # Generar homoclave aleatoria (una letra y un dígito, o un dígito y una letra)
+    letra = random.choice("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+    digito = random.choice("0123456789")
+    homoclave = random.choice([f"{letra}{digito}", f"{digito}{letra}"])
     
     # Formar CURP provisional
     curp = (

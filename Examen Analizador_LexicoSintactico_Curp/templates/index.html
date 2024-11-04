@@ -96,7 +96,20 @@
             const consonanteSegundoApellido = segundoApellido.match(/[^AEIOU]/g);
             const consonanteNombre = nombre.match(/[^AEIOU]/g);
 
-            const curp = `${primerApellido.charAt(0)}${primerApellido.charAt(1)}${segundoApellido.charAt(0)}${nombre.charAt(0)}${anio.slice(-2)}${mes}${dia}${sexo}${estado}${consonantePrimerApellido ? consonantePrimerApellido[1] : 'X'}${consonanteSegundoApellido ? consonanteSegundoApellido[1] : 'X'}${consonanteNombre ? consonanteNombre[1] : 'X'}`;
+            const homoclaveAleatoria = () => {
+    const letras = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const numeros = "0123456789";
+    
+    // Genera una combinación de letra-número o número-letra aleatoriamente
+    const combinacion = Math.random() > 0.5 
+        ? letras.charAt(Math.floor(Math.random() * letras.length)) + numeros.charAt(Math.floor(Math.random() * numeros.length))
+        : numeros.charAt(Math.floor(Math.random() * numeros.length)) + letras.charAt(Math.floor(Math.random() * letras.length));
+    
+    return combinacion;
+};
+
+// Generación de CURP con los dos últimos dígitos aleatorios en la homoclave
+const curp = `${primerApellido.charAt(0)}${primerApellido.charAt(1)}${segundoApellido.charAt(0)}${nombre.charAt(0)}${anio.slice(-2)}${mes}${dia}${sexo}${estado}${consonantePrimerApellido ? consonantePrimerApellido[1] : 'X'}${consonanteSegundoApellido ? consonanteSegundoApellido[1] : 'X'}${consonanteNombre ? consonanteNombre[1] : 'X'}${homoclaveAleatoria()}`;
 
             const newWindow = window.open();
             newWindow.document.write(`
