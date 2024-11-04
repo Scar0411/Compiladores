@@ -13,62 +13,56 @@ PALABRAS_PROHIBIDAS = [
 ]
 
 def limpiar_nombre(nombre):
-    # Remplazar "Ñ" con "X" si se encuentra en nombres o apellidos
     return nombre.replace("Ñ", "X").upper()
 
 def verificar_curp(curp):
-    # Si alguna palabra prohibida está en el inicio de la CURP, marca como inválida
     for palabra in PALABRAS_PROHIBIDAS:
         if curp.startswith(palabra):
             return True
     return False
 
 def generar_curp(nombre, primer_apellido, segundo_apellido, dia_nacimiento, mes_nacimiento, anio_nacimiento, sexo, estado):
-    # Limpiar nombres de caracteres especiales
     nombre = limpiar_nombre(nombre)
     primer_apellido = limpiar_nombre(primer_apellido)
     segundo_apellido = limpiar_nombre(segundo_apellido)
     
-    # Extraer iniciales y primera vocal interna
     primera_letra_apellido = primer_apellido[0].upper()
     primera_vocal_apellido = re.search(r'[AEIOU]', primer_apellido[1:], re.I)
     primera_vocal_apellido = primera_vocal_apellido.group(0).upper() if primera_vocal_apellido else 'X'
     primera_letra_segundo_apellido = segundo_apellido[0].upper() if segundo_apellido else 'X'
     primera_letra_nombre = nombre[0].upper()
+
+    # Obtener consonantes adicionales
+    consonante_segundo_apellido = re.search(r'[^AEIOU]', segundo_apellido[1:], re.I)
+    consonante_nombre = re.search(r'[^AEIOU]', nombre[1:], re.I)
     
-    # Fecha de nacimiento (Formato YYMMDD)
-    anio = anio_nacimiento[-2:]  # Solo últimos dos dígitos del año
+    consonante_segundo_apellido = consonante_segundo_apellido.group(0).upper() if consonante_segundo_apellido else 'X'
+    consonante_nombre = consonante_nombre.group(0).upper() if consonante_nombre else 'X'
+
+    anio = anio_nacimiento[-2:]
     mes = mes_nacimiento.zfill(2)
     dia = dia_nacimiento.zfill(2)
-    
-    # Género
     genero = sexo.upper()
-    
-    # Estado
     estado = estado.upper()
-    
-    # Consonantes internas
+
     consonantes_internas = ''.join(
         (re.search(r'[^AEIOU]', x[1:], re.I).group(0).upper() if re.search(r'[^AEIOU]', x[1:], re.I) else 'X')
         for x in (primer_apellido, segundo_apellido, nombre)
     )
-    
-    # Homoclave
+
     homoclave = 'XX'
     
     # Formar CURP provisional
     curp = (
         f"{primera_letra_apellido}{primera_vocal_apellido}"
-        f"{primera_letra_segundo_apellido}{primera_letra_nombre}"
+        f"{consonante_segundo_apellido}{primera_letra_nombre}"
         f"{anio}{mes}{dia}{genero}{estado}{consonantes_internas}{homoclave}"
     )
-    
-    # Validar CURP para evitar palabras prohibidas
+
     if verificar_curp(curp):
-        # Reemplazar primera vocal interna por "X" si contiene palabra prohibida
         curp = (
             f"{primera_letra_apellido}X"
-            f"{primera_letra_segundo_apellido}{primera_letra_nombre}"
+            f"{consonante_segundo_apellido}{primera_letra_nombre}"
             f"{anio}{mes}{dia}{genero}{estado}{consonantes_internas}{homoclave}"
         )
     
@@ -89,7 +83,6 @@ def validate():
     sexo = request.form.get('sexo')
     estado = request.form.get('estado')
     
-    # Generar CURP
     curp = generar_curp(
         nombre, primer_apellido, segundo_apellido,
         dia_nacimiento, mes_nacimiento, anio_nacimiento,
@@ -100,4 +93,3 @@ def validate():
 
 if __name__ == '__main__':
     app.run(port=5001)
-    
